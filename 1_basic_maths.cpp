@@ -1,4 +1,5 @@
 #include<bits/stdc++.h>
+#include<iostream>
 using namespace std;
 
 //Counting digits
@@ -56,7 +57,7 @@ bool palindromeCheck(int x){
 
 //armstrong no. = is a number that is equal to the sum of its own digits 
 //each raised to the power of the number of digits.
-void armstrong (int n){
+bool armstrong (int n){
     int num = n;
     int cnt_digits = count_digits(n);
     int sum = 0;
@@ -66,10 +67,7 @@ void armstrong (int n){
         n = n/10;
     }
 
-    if (num == sum)
-        cout << num << " is an Armstrong number";
-    else
-        cout << " Not an armstring no.";
+    return (num == sum);
 }
 
 //prime or not
@@ -89,29 +87,21 @@ bool checkPrime(int n){
 }
 
 //Optimal solution
-bool checkPrime(int n){
-    int cnt = 0;
-    for (int  i = 0; i <= sqrt(n); i++){
-        if (n%i == 0){
-            cnt++;
-        
-        if (n/i != i){
-            cnt++;
+bool Prime_(int n){
+   if (n <= 1) return false;
+    for (int i = 2; i <= sqrt(n); i++){
+        if (n % i == 0){
+            return false;
         }
-      }
-    } 
-
-    if (cnt == 2) 
-        return true;
-    else 
-        return false;
+    }
+    return true;
 }
 
 //HCF - O(min(n1, n2))
 //Brute force
 int HCF(int n1, int n2){
     int hcf = 1;
-    for (int i = 0; i <= min(n1, n2); i++){
+    for (int i = 1; i <= min(n1, n2); i++){
         if(n1%i == 0 && n2%i == 0 ){
             hcf = i;
         }
@@ -138,19 +128,16 @@ int find_hcf(int n1, int n2){
         else{
             n2 = n2 % n1;
         }
-
-        if (n1 == 0){
-            return n2;
-        }
-        return n1;
     }
+        return (n1 == 0) ? n2 : n1;
+    
 }
 
 //factors of a no.
 //Brute force 
 vector<int> divisors(int n){
     vector <int> d;
-    for (int  i = 0; i <= n; i++){
+    for (int  i = 1; i <= n; i++){
         if (n%i == 0){
             d.push_back(i);
         }
@@ -161,7 +148,7 @@ vector<int> divisors(int n){
 //optimal
 vector<int> divisors_(int n){
     vector <int> d;
-    for (int  i = 0; i <= sqrt(n); i++){
+    for (int  i = 1; i <= sqrt(n); i++){
         if (n%i == 0){
             d.push_back(i);
 
@@ -170,5 +157,70 @@ vector<int> divisors_(int n){
             }
         }
     }
+    sort(d.begin(), d.end());
     return d;
+}
+
+
+int main(){
+    int n, n1, n2, choice;
+    vector <int> result;
+
+    while (true){
+    cout << "\nMenu : " << endl;
+    cout << "1. Count the digits " << endl;
+    cout << "2. Find all the divisors "<< endl;
+    cout << "3. Find HCF of 2 numbers" << endl;
+    cout << "4. Check whether prime or not " << endl;
+    cout << "5. Check whether armstrong or not " << endl;
+    cout << "6. Check whether palindrome or not" << endl;
+    cout << "0. Exit" << endl; 
+    cout << "Enter your choice : " ;
+    cin >> choice;
+
+    switch(choice) {
+        case 0: return 0; 
+        case 1: cout << "Enter the number: " ;
+                cin >> n;
+                cout << "No. of digits in " << n << " = " << count_digits(n);
+                break;
+        case 2: cout << "Enter the number: " ; 
+                cin >> n;
+                cout << "The divisors of " << n << " = " ; 
+                result = divisors_(n);
+                for (auto it = result.begin(); it != result.end(); it++){
+                    cout << *(it) << " ";
+                }
+                break;
+        case 3: cout << "Enter the numbers : ";
+                cin >> n1 >> n2;
+                cout << "HCF of " << n1 << " and  " << n2 << " = " << find_hcf(n1, n2);
+                break;
+        case 4: cout << "Enter the number : " ;
+                cin >> n;
+                if (Prime_(n))
+                    cout << n << " is Prime";
+                else
+                    cout << n << " is not prime";
+                break;
+        case 5: cout << "Enter the number : ";
+                cin >> n;
+                if (armstrong(n))
+                    cout << n << " is armstrong number";
+                else
+                    cout << n << " is not armstrong number";
+                break;
+        case 6: cout << "Enter the number : ";
+                cin >> n;
+                if (palindromeCheck(n))
+                    cout << n << " is a palindrome" ;
+                else
+                    cout << n << " is not a palindrome" ;
+                break;
+        default: cout << "Invalid choice" << endl;
+                break;
+
+    }
+    }
+    return 0;
 }
